@@ -5,16 +5,16 @@ import com.foodyburger.model.signin.LoggedInUser
 
 interface SignInDataSource {
 
-    fun register(
+    suspend fun register(
         username: String,
         password: String,
         email: String
     ): OpResult<Any>
 
-    fun login(
+    suspend fun login(
         username: String,
         password: String
     ): OpResult<LoggedInUser>
 
-    fun logout(): OpResult<Any>
+    suspend fun logout(): OpResult<Any>
 }

@@ -2,14 +2,13 @@ package com.foodyburger.model
 
 import com.foodyburger.common.OpResult
 import com.foodyburger.model.signin.LoggedInUser
-import kotlin.math.log
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: SignInDataSource) {
+class LoginRepository(private val dataSource: SignInDataSource) {
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
@@ -24,12 +23,12 @@ class LoginRepository(val dataSource: SignInDataSource) {
         user = null
     }
 
-    fun logout() {
+    suspend fun logout() {
         user = null
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): OpResult<LoggedInUser> {
+    suspend fun login(username: String, password: String): OpResult<LoggedInUser> {
         // handle login
         val result: OpResult<LoggedInUser> = dataSource.login(username, password)
 

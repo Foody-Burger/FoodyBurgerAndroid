@@ -4,16 +4,19 @@ import com.foodyburger.faking.errorBehavior
 import com.foodyburger.faking.FakeImpl
 import com.foodyburger.common.OpResult
 import com.foodyburger.model.SignInDataSource
+import kotlinx.coroutines.delay
 
 // TODO: Perhaps move this somewhere to UI tests? IDK.
 @FakeImpl
 class SignInDataSourceFake : SignInDataSource {
 
-    override fun register(
+    override suspend fun register(
         username: String,
         password: String,
         email: String
     ): OpResult<Any> {
+        delay(2000L)
+
         if (this.errorBehavior()) {
             return OpResult.Error("registerError")
         }
@@ -21,7 +24,9 @@ class SignInDataSourceFake : SignInDataSource {
         return OpResult.success()
     }
 
-    override fun login(username: String, password: String): OpResult<LoggedInUser> {
+    override suspend fun login(username: String, password: String): OpResult<LoggedInUser> {
+        delay(2000L)
+
         if (this.errorBehavior()) {
             return OpResult.Error("loginError")
         }
@@ -32,7 +37,9 @@ class SignInDataSourceFake : SignInDataSource {
         return OpResult.Success(fakeUser)
     }
 
-    override fun logout(): OpResult<Any> {
+    override suspend fun logout(): OpResult<Any> {
+        delay(2000L)
+
         if (this.errorBehavior()) {
             return OpResult.Error("logoutError")
         }

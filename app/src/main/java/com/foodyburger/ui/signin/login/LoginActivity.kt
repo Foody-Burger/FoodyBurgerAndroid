@@ -17,9 +17,14 @@ import com.foodyburger.MainActivity
 import com.foodyburger.databinding.ActivityLoginBinding
 
 import com.foodyburger.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
@@ -84,17 +89,21 @@ class LoginActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
+                        scope.launch {
+                            loginViewModel.login(
+                                username.text.toString(),
+                                password.text.toString()
+                            )
+                        }
                 }
                 false
             }
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                scope.launch {
+                    loginViewModel.login(username.text.toString(), password.text.toString())
+                }
             }
         }
     }
